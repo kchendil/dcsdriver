@@ -19,6 +19,7 @@
 
 default['dcsdriver']['driver_shim_zip_url'] = "http://164.99.86.253/publish/Builds/IDM/dorado_sp2_patch3/Drivers/dirxml_flatfile/20130625/dirxmlflatfilefp.zip"
 default['dcsdriver']['ulimit'] = "4096"
+default['dcsdriver']['OAUTH'] = "true"
 default['dcsdriver']['admin_name']="admin.servers.system"
 default['dcsdriver']['edirectory_port']="524"
 default['dcsdriver']['idm_password']="n"

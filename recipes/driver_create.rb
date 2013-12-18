@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: jade
+# Cookbook Name:: dcsdriver
 # Recipe:: default
 #
 # Copyright 2013, Chendil Kumar Manoharan
@@ -18,14 +18,21 @@
 #
 
 number=1.times.map{ 1000 +  Random.rand(11) }
-
+#node.normal["apache]["dir"]
+if node.dcsdriver["OAUTH"] == "true" 
  template "/opt/novell/idm/Designer/NOVLIDMDCSB.properties" do
-   source "NOVLIDMDCSB.properties.erb"
+   source "NOVLIDMDCSB_OAUTH.properties.erb"
    owner "root" 
    mode "0644"  
 end
-
-
+end
+if node.dcsdriver["OAUTH"] == "false" 
+template "/opt/novell/idm/Designer/NOVLIDMDCSB.properties" do
+   source "NOVLIDMDCSB.properties.erb"
+   owner "root" 
+   mode "0644" 
+end
+end
 execute "Create/Upgrade DCS Driver" do
  user "root" 
  command "/bin/sh -c 'ulimit -n 4096; LD_LIBRARY_PATH=/opt/novell/idm/Designer/plugins/com.novell.core.iconeditor_4.0.0.201206110753/os/linux:/opt/novell/idm/Designer/plugins/com.novell.core.jars_4.0.0.201206110753/os/linux/x86:/opt/novell/idm/Designer/plugins/com.novell.core.jars_4.0.0.201206110753/os/linux/gcc3:$LD_LIBRARY_PATH \"/opt/novell/idm/Designer/Designer\" -nosplash -nl en -application com.novell.idm.rcp.DesignerHeadless -command deployDriver -p \"/opt/novell/idm/Designer//packages/eclipse/plugins\":\"/tmp/plugins\" -a \"admin.servers.system\" -w novell123$ -s 127.0.0.1:524 -c \"driverset1.system\" -b NOVLIDMDCSB -l \"/var/opt/novell/idm/userapp_driver.log\" -u IDM4_15_DCS2#{number}'" 
